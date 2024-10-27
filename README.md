@@ -4,9 +4,10 @@
 
 # Стэк: 
 1. SQL;
-2. PowerQuery;
-3. Dax;
-4. M;
+2. Power BI;
+3. PowerQuery;
+4. Dax;
+5. M;
 
  
 
