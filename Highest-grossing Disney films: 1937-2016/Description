@@ -1,0 +1,66 @@
+Задание:
+Разработать отчет в соответствие с предъявленными требованиями.
+
+Условия:
+1. Данные в отчет должны быть импортированы
+2. В отчете должен быть переключатель между итоговыми сборами и сборами с поправкой на инфляцию
+3. В отчете должен быть переключатель отображения кассовых сборов в миллионах и полной суммой (1 500 000 или 1,5 mln)
+
+Источник данных:
+Тестовый датасет (MS SQL Server)
+Server phb-testsql01.database.windows.net
+Base phb-test-db
+Login pbi_reader
+Pass SGDY8sK4TyGU
+
+Стартовый SQL-запрос:
+SELECT
+movie_title,
+release_date,
+genre,
+mpaa_rating,
+total_gross,
+inflation_adjusted_gross
+FROM
+[phb-test-db].dbo.disney_movies_total_gross;
+
+Условия к этому запросу: 
+1.Дата в колонке release_date должна быть в формате Date
+2. Значения null в колонке ganre заменить на Not specified
+3. Добавить колонку release_year
+4. Добавить колонку gross_index. Рейтинг самых кассовых фильмов года (от
+1 до n)
+**Эти условия можно было выполнить с помощью корректировки стартового SQL-запроса, либо с помощью PowerQuery. Я выбрал SQL.
+
+Откорректированный SQL-запрос:
+SELECT
+movie_title,
+CONVERT (date, release_date) as release_date,
+YEAR (CONVERT (date,release_date)) as realease_year,
+ISNULL(genre, 'Not specified') as genre,
+mpaa_rating,
+total_gross,
+inflation_adjusted_gross,
+RANK () over (PARTITION by YEAR(CONVERT(date, release_date)) ORDER BY total_gross DESC) as gross_index
+FROM
+[phb-test-db].dbo.disney_movies_total_gross;
+
+Необходимые фильтры для визуализаций: 
+1. Жанр
+2. Период в годах
+
+Визуализации:
+- Суммарные сборы согласно фильтрам
+- Кол-во фильмов согласно фильтрам
+- Среднее количество фильмов в год согласно фильтрам
+- Сборы по жанрам (в алфавитном порядке)
+- Список самых кассовых фильмов года. Указать:
+- Год фильма
+- Жанр
+- Название
+- Итоговые сборы
+
+
+
+
+
